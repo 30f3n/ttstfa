@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محطة استخبارات الهواتف | OSINT Terminal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #07090e;
+            color: #e2e8f0;
+        }
+        .glow-box {
+            box-shadow: 0 0 25px rgba(13, 148, 136, 0.15);
+            border: 1px solid rgba(20, 184, 166, 0.2);
+        }
+        .terminal-glow {
+            text-shadow: 0 0 10px rgba(45, 212, 191, 0.5);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-between p-4 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-[#07090e] to-black">
+
+    <!-- رأس الصفحة -->
+    <header class="w-full max-w-3xl text-center mt-8 mb-6">
+        <h1 class="text-3xl md:text-4xl font-black text-teal-400 terminal-glow mb-2">بحث استخباراتي عن أرقام الهواتف</h1>
+        <p class="text-slate-400 text-sm">أدخل رقم الهاتف المطلوب للاستعلام عنه عبر شبكة العقد والمستودعات الرقمية المشفرة.</p>
+    </header>
+
+    <!-- صندوق البحث الرئيسي -->
+    <main class="w-full max-w-2xl bg-slate-900/80 backdrop-blur-md rounded-2xl p-6 glow-box mb-8">
+        <form id="osintForm" class="space-y-4">
+            <div>
+                <label for="phoneNumber" class="block text-sm font-semibold text-teal-300 mb-2">أدخل رقم الهاتف (مثال: 9647xxxxxxxx+)</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-teal-500">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                    </span>
+                    <input type="text" id="phoneNumber" required placeholder="9647500000000" 
+                        class="w-full pr-10 pl-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-mono">
+                </div>
+            </div>
+
+            <button type="submit" id="submitBtn" class="w-full py-3.5 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-bold rounded-xl shadow-lg shadow-teal-900/30 transition-all flex items-center justify-center space-x-2 space-x-reverse">
+                <span id="btnText">بدء التحقيق الشامل</span>
+                <svg id="loadingSpinner" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+            </button>
+        </form>
+
+        <!-- ملاحظة نظام الاتصال -->
+        <div class="mt-4 p-3 bg-teal-500/10 border border-teal-500/20 rounded-xl text-teal-300 text-xs flex items-start space-x-2 space-x-reverse">
+            <svg class="w-4 h-4 text-teal-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <div>
+                <strong>ربط النظام:</strong> يتصل هذا الموقع بملف البروكسي الخلفي (proxy.php) الخاص بك لتمرير الطلبات بأمان وتجاوز قيود الخوادم المستهدفة.
+            </div>
+        </div>
+    </main>
+
+    <!-- صندوق النتائج -->
+    <div id="resultContainer" class="w-full max-w-2xl bg-slate-900/90 border border-slate-800 rounded-2xl p-6 mb-12 hidden shadow-2xl">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+            <h3 class="text-teal-400 font-bold flex items-center space-x-2 space-x-reverse">
+                <span class="w-2.5 h-2.5 bg-teal-500 rounded-full animate-pulse"></span>
+                <span>تقرير البحث الشامل</span>
+            </h3>
+            <span class="text-xs text-slate-500 font-mono">SECURE_QUERY_OK</span>
+        </div>
+        <div id="resultText" class="font-mono text-sm text-slate-300 whitespace-pre-wrap leading-relaxed bg-slate-950 p-4 rounded-xl border border-slate-900 max-h-96 overflow-y-auto"></div>
+    </div>
+
+    <!-- صندوق الأخطاء -->
+    <div id="errorContainer" class="w-full max-w-2xl bg-rose-950/40 border border-rose-900/50 rounded-2xl p-4 mb-12 hidden text-center">
+        <p class="text-rose-400 text-sm font-semibold" id="errorText">حدث خطأ أثناء الاتصال بالخادم</p>
+    </div>
+
+    <footer class="text-slate-600 text-xs mb-4">
+        AI Intelligence Grid &bull; Terminal v2.4
+    </footer>
+
+    <script>
+        document.getElementById('osintForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const phone = document.getElementById('phoneNumber').value.trim();
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const spinner = document.getElementById('loadingSpinner');
+            const resultContainer = document.getElementById('resultContainer');
+            const resultText = document.getElementById('resultText');
+            const errorContainer = document.getElementById('errorContainer');
+            const errorText = document.getElementById('errorText');
+
+            // إعادة تعيين الواجهة
+            resultContainer.classList.add('hidden');
+            errorContainer.classList.add('hidden');
+            submitBtn.disabled = true;
+            btnText.textContent = 'جاري إجراء التحقيق الأمني...';
+            spinner.classList.remove('hidden');
+
+            try {
+                // استبدل الرابط أدناه برابط ملف proxy.php الخاص بك على الاستضافة
+                const response = await fetch('proxy.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: phone })
+                });
+
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                let rawText = data.reply || data.message || data.content || JSON.stringify(data, null, 2);
+                let cleanedText = rawText.replace(/[\*_`#]/g, '');
+
+                resultText.textContent = cleanedText.trim();
+                resultContainer.classList.remove('hidden');
+
+            } catch (err) {
+                console.error(err);
+                errorText.textContent = 'فشل الاتصال: ' + err.message;
+                errorContainer.classList.remove('hidden');
+            } finally {
+                submitBtn.disabled = false;
+                btnText.textContent = 'بدء التحقيق الشامل';
+                spinner.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
